@@ -8,9 +8,7 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get('/:id', async (req, res, next) => {
-  const user = await User.findOne({
-    where: { id: req.params.id }
-  });
+  const user = await User.findById(req.params.id);
   res.send(user);
 });
 
@@ -26,4 +24,30 @@ router.post('/', async (req, res, next) => {
   }
 });
 
+router.put('/:id', async(req, res, next) => {
+  try{
+    const update = await User.update(req.body,{
+      where: { id: req.params.id },
+      returning: true,
+      plain: true
+    });
+    res.send(update);
+  } catch (err) {
+    res.status(400).send();
+  }
+});
+
+router.delete('/:id', async(req, res, next) => {
+  try{
+    const deleted = await User.destroy({
+      where: {
+        id: req.params.id
+      }
+    });
+    res.send(deleted);
+  }
+  catch (err) {
+    res.status(400).send();
+  }
+})
 module.exports = router;
