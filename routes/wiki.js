@@ -45,6 +45,6 @@ router.post('/', async (req, res, next) => {
 
 router.get('/:slug', (req, res, next)=> {
   res.send(`We hit a dynamic route at ${req.params.slug}`)
-})
+});
 
 module.exports = router;
