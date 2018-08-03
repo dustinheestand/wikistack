@@ -3,6 +3,8 @@ const db = new Sequelize('postgres://localhost:5432/wikistack', {
   logging: false
 });
 
+const slugify = require('slugify');
+
 const Page = db.define('page', {
   title: {
     type: Sequelize.STRING,
@@ -14,12 +16,15 @@ const Page = db.define('page', {
   },
   content: {
     type: Sequelize.STRING,
-    allowNull: false,
-
+    allowNull: false
   },
   status: {
     type: Sequelize.ENUM('open', 'closed')
   }
+});
+
+Page.beforeValidate(page => {
+  page.slug = slugify(page.title);
 });
 
 const User = db.define('user', {

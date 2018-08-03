@@ -1,7 +1,6 @@
 const router = require('express').Router();
 const views = require('../views');
 const { User, Page } = require('../models');
-const slug = require('slugify');
 router.get('/', (req, res, next) => {
   res.send(views.main());
 });
@@ -10,19 +9,27 @@ router.get('/add', (req, res, next) => {
   res.send(views.addPage());
 });
 
-router.post('/', async (req, res, next) => {
+router.get('/:slug', (req, res, next) => {
+  const page = Page.findOne({
+    where: { slug: req.params.slug }
+  });
+  res.send(views.wikiPage(page));
+});
 
+router.post('/', async (req, res, next) => {
   const page = new Page({
     title: req.body.title,
-    slug: slug(req.body.title),
     content: req.body.content,
     status: req.body.status
   });
 
   try {
     await page.save();
-    res.redirect('/');
-  } catch (error) {next(error)}
+    const slug = page.dataValues.slug;
+    res.redirect(`/wiki/${slug}`);
+  } catch (error) {
+    next(error);
+  }
   // const author = await User.findOrCreate({
   //   where: {
   //     name: req.body.name,
@@ -43,8 +50,8 @@ router.post('/', async (req, res, next) => {
   // }
 });
 
-router.get('/:slug', (req, res, next)=> {
-  res.send(`We hit a dynamic route at ${req.params.slug}`)
-});
+/* router.get('/:slug', (req, res, next) => {
+  res.send(`We hit a dynamic route at ${req.params.slug}`);
+}); */
 
 module.exports = router;
