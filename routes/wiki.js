@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const views = require('../views');
 const { User, Page } = require('../models');
-
+const slug = require('slugify');
 router.get('/', (req, res, next) => {
   res.send(views.main());
 });
@@ -20,6 +20,7 @@ router.post('/', async (req, res, next) => {
   try {
     const post = await Page.create({
       title: req.body.title,
+      slug: slug(req.body.title),
       content: req.body.content,
       status: req.body.status
     });
