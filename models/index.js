@@ -15,9 +15,7 @@ const Page = db.define('page', {
   content: {
     type: Sequelize.STRING,
     allowNull: false,
-    validate: {
-      isEmail: true
-    }
+
   },
   status: {
     type: Sequelize.ENUM('open', 'closed')
@@ -31,7 +29,10 @@ const User = db.define('user', {
   },
   email: {
     type: Sequelize.STRING,
-    allowNull: false
+    allowNull: false,
+    validate: {
+      isEmail: true
+    }
   }
 });
 

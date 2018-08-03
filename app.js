@@ -4,13 +4,15 @@ const path = require('path');
 const app = express();
 const router = require('./routes');
 const models = require('./models');
+const wikiRouter = require('./routes/wiki');
+const userRouter = require('./routes/user');
 const PORT = 3000;
 
 app.use(morgan('dev'));
 app.use(express.json({}));
 app.use(express.urlencoded({ extended: false }));
 app.use('/', express.static(path.join(__dirname, 'public')));
-app.use(router);
+app.use('/wiki', wikiRouter);
 
 const init = async () => {
   await models.db.sync({ force: true });
