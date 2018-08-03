@@ -9,8 +9,8 @@ router.get('/add', (req, res, next) => {
   res.send(views.addPage());
 });
 
-router.get('/:slug', (req, res, next) => {
-  const page = Page.findOne({
+router.get('/:slug', async (req, res, next) => {
+  const page = await Page.findOne({
     where: { slug: req.params.slug }
   });
   res.send(views.wikiPage(page));
