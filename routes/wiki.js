@@ -11,24 +11,40 @@ router.get('/add', (req, res, next) => {
 });
 
 router.post('/', async (req, res, next) => {
-  const author = await User.findOrCreate({
-    where: {
-      name: req.body.name,
-      email: req.body.email
-    }
+
+  const page = new Page({
+    title: req.body.title,
+    slug: slug(req.body.title),
+    content: req.body.content,
+    status: req.body.status
   });
+
   try {
-    const post = await Page.create({
-      title: req.body.title,
-      slug: slug(req.body.title),
-      content: req.body.content,
-      status: req.body.status
-    });
-    console.log(post);
-    res.send(post);
-  } catch (err) {
-    res.status(400).send();
-  }
+    await page.save();
+    res.redirect('/');
+  } catch (error) {next(error)}
+  // const author = await User.findOrCreate({
+  //   where: {
+  //     name: req.body.name,
+  //     email: req.body.email
+  //   }
+  // });
+  // try {
+  //   const post = await Page.create({
+  //     title: req.body.title,
+  //     slug: slug(req.body.title),
+  //     content: req.body.content,
+  //     status: req.body.status
+  //   });
+  //   console.log(post);
+  //   res.json(req.body);
+  // } catch (err) {
+  //   res.status(400).send();
+  // }
 });
+
+router.get('/:slug', (req, res, next)=> {
+  res.send(`We hit a dynamic route at ${req.params.slug}`)
+})
 
 module.exports = router;
