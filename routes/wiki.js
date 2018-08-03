@@ -1,8 +1,11 @@
 const router = require('express').Router();
 const views = require('../views');
 const { User, Page } = require('../models');
-router.get('/', (req, res, next) => {
-  res.send(views.main());
+
+router.get('/', async (req, res, next) => {
+  const allPages = await Page.findAll();
+  console.log(allPages);
+  res.send(views.main(allPages));
 });
 
 router.get('/add', (req, res, next) => {
