@@ -14,9 +14,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/', express.static(path.join(__dirname, 'public')));
 app.use('/wiki', wikiRouter);
 app.use('/users', userRouter);
-app.use('/', (req, res) => {
-  res.redirect('/wiki');
-});
 
 const init = async () => {
   await models.db.sync({ force: true });

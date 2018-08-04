@@ -1,4 +1,5 @@
 const router = require('express').Router();
+//const router = require('./index');
 const views = require('../views');
 const { User } = require('../models');
 
@@ -24,9 +25,9 @@ router.post('/', async (req, res, next) => {
   }
 });
 
-router.put('/:id', async(req, res, next) => {
-  try{
-    const update = await User.update(req.body,{
+router.put('/:id', async (req, res, next) => {
+  try {
+    const update = await User.update(req.body, {
       where: { id: req.params.id },
       returning: true,
       plain: true
@@ -37,17 +38,16 @@ router.put('/:id', async(req, res, next) => {
   }
 });
 
-router.delete('/:id', async(req, res, next) => {
-  try{
+router.delete('/:id', async (req, res, next) => {
+  try {
     const deleted = await User.destroy({
       where: {
         id: req.params.id
       }
     });
     res.send(deleted);
-  }
-  catch (err) {
+  } catch (err) {
     res.status(400).send();
   }
-})
+});
 module.exports = router;
